@@ -24,7 +24,6 @@ cffi==1.15.0
 chardet==3.0.4
 charset-normalizer==2.0.12
 click==8.0.4
-cliff==4.0.0
 cmaes==0.8.2
 cmd2==2.4.2
 colorama==0.4.4
@@ -105,7 +104,6 @@ keras==2.9.0
 keras-nightly==2.5.0.dev2021032900
 Keras-Preprocessing==1.1.2
 kiwisolver==1.4.2
-konoha==4.6.5
 langcodes==3.3.0
 langdetect==1.0.9
 libclang==14.0.6
