@@ -107,8 +107,6 @@ kiwisolver==1.4.2
 langcodes==3.3.0
 langdetect==1.0.9
 libclang==14.0.6
-linkedin-scraper==2.9.0
-locationtagger==0.0.1
 lxml==4.8.0
 Mako==1.2.3
 Markdown==3.4.1
@@ -198,7 +196,6 @@ smmap==5.0.0
 sniffio==1.2.0
 sortedcontainers==2.4.0
 soupsieve==2.3.1
-spacy==3.4.1
 spacy-legacy==3.0.9
 spacy-loggers==1.0.2
 SQLAlchemy==1.4.41
