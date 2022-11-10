@@ -2073,7 +2073,7 @@ def func(choice):
 
 			# df.to_excel("HCP_tweets.xlsx", index=False, encoding='utf-8')
 			
-			df = pd.read_excel("hcp_tweets.xlsx")
+			df = pd.read_excel("https://github.com/Mitra-Sadas/Streamlit_Demo_Insights/blob/main/hcp_tweets.xlsx?raw=true")
 
 			data1 = df
 
@@ -2189,7 +2189,7 @@ def func(choice):
 								#data = Sentiment_Analysis(data)
 
 								#data.to_excel("HCP_sentiment_Analysis.xlsx", index=False, encoding='utf-8')
-								data = pd.read_excel("HCP_sentiment_Analysis.xlsx")
+								data = pd.read_excel("https://github.com/Mitra-Sadas/Streamlit_Demo_Insights/blob/main/HCP_sentiment_Analysis.xlsx?raw=true")
 
 							st.markdown('**<p style="font-size:20px;border-radius:2%;text-align:center;">How are the tweets sounding:question:</p>**',unsafe_allow_html=True)
 							plt = pie_chart(data)
@@ -2208,7 +2208,7 @@ def func(choice):
 
 						#final_kic.to_excel("HCP_KIC.xlsx", index=False, encoding='utf-8')
 
-						final_kic = pd.read_excel("HCP_KIC.xlsx")
+						final_kic = pd.read_excel("https://github.com/Mitra-Sadas/Streamlit_Demo_Insights/blob/main/HCP_KIC.xlsx?raw=true")
 
 						#final_kic = data
 
