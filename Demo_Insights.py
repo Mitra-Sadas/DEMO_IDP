@@ -945,7 +945,8 @@ def profilesearch(df):
 	chrom_opt.add_argument("--disable-extensions")
 	chrom_opt.add_argument("--disable-gpu")
 	chrom_opt.headless = True
-	driver = webdriver.Chrome(chrome_options=chrom_opt)
+	exe_path = 'https://github.com/Mitra-Sadas/Streamlit_Demo_Insights/blob/main/chromedriver.exe'
+	driver = webdriver.Chrome(chrome_options=chrom_opt,executable_path=exe_path )
 	handle_list = []
 	name = []
 
