@@ -1451,8 +1451,11 @@ def func(choice):
 				selection_list.insert(0," ")
 				#st.write(selection_list)
 				#col21,col22,col23 = st.columns(3) 
+				placeholder = st.empty()
+				placeholder.write("Please choose an option to show the analysis")
 				hcpname = st.sidebar.selectbox('Please select the Name of HCP',selection_list,key='sel1')
 				if hcpname is not None and hcpname!=" ":
+					placeholder.empty()
 					if hcpname == "ALL":
 						data = data1
 					else:
