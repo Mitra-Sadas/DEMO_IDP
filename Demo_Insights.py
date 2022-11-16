@@ -1052,6 +1052,8 @@ def func(choice):
 		if select_data == "Use valid profiles Data":
 			try:
 				d = st.session_state.flag
+				with st.empty():
+					st.button("Please click here to perform the analysis")
 			except:
 				pass
 				st.write("You have choosen an option to use the Valid profiles Data from previous session.")
@@ -1060,9 +1062,12 @@ def func(choice):
 		#col21,col22 =st.columns(2)
 		#with col21:
 		if select_data == "Upload New File":
+				placeholder = st.empty()
+				placeholder.write("Please upload the file for performing Analysis")
 				upld = st.sidebar.file_uploader("Upload Valid profiles Data for Analysis",type=["csv"])
 				if upld is not None:
-					d = pd.read_csv(upld)		
+					d = pd.read_csv(upld)
+				placeholder.empty()
 		if len(d)>0:
 			#d = d.head(2)
 			def f_word_cloud(column):
