@@ -1053,8 +1053,9 @@ def func(choice):
 			try:
 				plchld = st.empty()
 				click = plchld.button("Please click here to perform the analysis")
-				plchld.empty()
+				
 				if click:
+					plchld.empty()
 					d = st.session_state.flag
 					
 			except:
