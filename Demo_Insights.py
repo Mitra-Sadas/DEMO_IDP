@@ -924,8 +924,9 @@ def func(choice):
 		if len(df)>0:
 			with st.spinner("Searching through twitter and collecting handles, please wait..."):
 				sleep(5)
-			sm_handles = profilesearch(df.head())
-			sm_handles.to_excel("sm_handles.xlsx", index=False, encoding='utf-8')
+			#sm_handles = profilesearch(df.head())
+			sm_handles = pd.read_excel("https://github.com/Mitra-Sadas/Streamlit_Demo_Insights/blob/main/sm_handles.xlsx?raw=true")
+			#sm_handles.to_excel("sm_handles.xlsx", index=False, encoding='utf-8')
 
 			st.markdown("""
 			<style>
@@ -985,7 +986,7 @@ def func(choice):
 
 					df = twittwe_api(sm_handles)
 
-					df.to_excel("sm_full_profile.xlsx", index=False, encoding='utf-8')
+					#df.to_excel("sm_full_profile.xlsx", index=False, encoding='utf-8')
 
 				st.download_button(label="Download Twitter Profiles information",data=df.to_csv(index=False).encode('utf-8'),file_name="Twitter Profiles information.csv",mime='text/csv')
 
