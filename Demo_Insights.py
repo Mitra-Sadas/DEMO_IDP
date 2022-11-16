@@ -984,7 +984,9 @@ def func(choice):
 				with st.spinner("Collecting Full Profile information using Twitter API, Please wait...."):
 					sleep(5)
 
-					df = twittwe_api(sm_handles)
+					#df = twittwe_api(sm_handles)
+					
+					df = pd.read_excel("https://github.com/Mitra-Sadas/Streamlit_Demo_Insights/blob/main/sm_full_profile.xlsx?raw=true")
 
 					#df.to_excel("sm_full_profile.xlsx", index=False, encoding='utf-8')
 
