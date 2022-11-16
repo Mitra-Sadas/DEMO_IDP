@@ -1063,11 +1063,11 @@ def func(choice):
 		#with col21:
 		if select_data == "Upload New File":
 				placeholder = st.empty()
-				placeholder.write("Please upload the file for performing Analysis")
+				placeholder.text("Please upload the file for performing Analysis")
 				upld = st.sidebar.file_uploader("Upload Valid profiles Data for Analysis",type=["csv"])
 				if upld is not None:
 					d = pd.read_csv(upld)
-				placeholder.empty()
+					placeholder.empty()
 		if len(d)>0:
 			#d = d.head(2)
 			def f_word_cloud(column):
