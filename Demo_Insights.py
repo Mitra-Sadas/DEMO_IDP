@@ -923,7 +923,7 @@ def func(choice):
 				st.dataframe(df.head())	
 		if len(df)>0:
 			with st.spinner("Searching through twitter and collecting handles, please wait..."):
-				sleep(5)
+				sleep(1)
 			#sm_handles = profilesearch(df.head())
 			sm_handles = pd.read_excel("https://github.com/Mitra-Sadas/Streamlit_Demo_Insights/blob/main/sm_handles.xlsx?raw=true")
 			#sm_handles.to_excel("sm_handles.xlsx", index=False, encoding='utf-8')
@@ -982,7 +982,7 @@ def func(choice):
 
 
 				with st.spinner("Collecting Full Profile information using Twitter API, Please wait...."):
-					sleep(5)
+					sleep(1)
 
 					#df = twittwe_api(sm_handles)
 					
