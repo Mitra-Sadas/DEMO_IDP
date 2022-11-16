@@ -1052,7 +1052,7 @@ def func(choice):
 		if select_data == "Use valid profiles Data":
 			try:
 				plchld = st.empty()
-				click = plchld.button("Please click here to perform the analysis")
+				click = plchld.check("Please click here to perform the analysis")
 				
 				if click:
 					plchld.empty()
