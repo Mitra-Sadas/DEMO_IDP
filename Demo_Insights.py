@@ -1063,7 +1063,7 @@ def func(choice):
 		#with col21:
 		if select_data == "Upload New File":
 				placeholder = st.empty()
-				placeholder.text("Please upload the file for performing Analysis")
+				placeholder.write("Please upload the file for performing Analysis")
 				upld = st.sidebar.file_uploader("Upload Valid profiles Data for Analysis",type=["csv"])
 				if upld is not None:
 					d = pd.read_csv(upld)
