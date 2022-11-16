@@ -1051,9 +1051,12 @@ def func(choice):
 
 		if select_data == "Use valid profiles Data":
 			try:
-				d = st.session_state.flag
-				with st.empty():
-					st.button("Please click here to perform the analysis")
+				plchld = st.empty()
+				click = plchld.button("Please click here to perform the analysis")
+				plchld.empty()
+				if click:
+					d = st.session_state.flag
+					
 			except:
 				pass
 				st.write("You have choosen an option to use the Valid profiles Data from previous session.")
