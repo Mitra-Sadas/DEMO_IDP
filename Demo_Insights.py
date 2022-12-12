@@ -1292,10 +1292,10 @@ def func(choice):
 				plt.plot(label,val)
 				#plt.xticks(rotation = 45)
 				#plt.title('Monthly Distribution of Messages', fontsize=25)
-				plt.ylabel('No of messages', fontsize=15)
-				plt.xlabel('Months', fontsize=15)
-				plt.xticks(rotation=70, fontsize=15)
-				plt.yticks(fontsize=15)
+				plt.ylabel('No of messages', fontsize=25)
+				plt.xlabel('Months', fontsize=25)
+				plt.xticks(rotation=70, fontsize=25)
+				plt.yticks(fontsize=25)
 				for i,j in zip(label,val):
 				    plt.text(x=i,y=j+0.20,s=str(j),fontsize=20)
 				plt.tight_layout()	
@@ -1306,10 +1306,10 @@ def func(choice):
 				top5_hashtag=data['Insight'].str.extract(r"#(\w+)")[0].str.lower().value_counts().sort_values(ascending=False)[0:5].sort_values()
 				plt.barh(y='#'+top5_hashtag.index,width=top5_hashtag.values)
 				#plt.title('Top 5 hashtags', fontsize=25)
-				plt.ylabel('Hashtags', fontsize=20)
-				plt.xlabel('Counts', fontsize=20)
-				plt.xticks(fontsize=20)
-				plt.yticks(fontsize=20)
+				plt.ylabel('Hashtags', fontsize=25)
+				plt.xlabel('Counts', fontsize=25)
+				plt.xticks(fontsize=25)
+				plt.yticks(fontsize=25)
 				for i in range(len(top5_hashtag)):
 				    plt.text(y=i,x=top5_hashtag.values[i]+0.1,s=str(top5_hashtag.values[i]),fontsize=20)
 				return plt
@@ -1328,8 +1328,8 @@ def func(choice):
 				domain  = ['Positive', 'Negative', 'Neutral']
 				range_ = ['green','red','orange']
 				bars = alt.Chart(df).mark_bar().encode(
-				    x=alt.X('count(MEDICAL_CONDITION):Q', stack='zero', axis=alt.Axis(title='Count',grid=False, format='.0f',tickMinStep=1), sort=alt.EncodingSortField(field='MEDICAL_CONDITION', op='count', order='descending')),
-				    y=alt.Y('MEDICAL_CONDITION:N',axis=alt.Axis(grid=False)),
+				    x=alt.X('count(MEDICAL_CONDITION):Q', stack='zero', axis=alt.Axis(title='Count',grid=False, format='.0f',tickMinStep=1, labelFontSize=20 , titleFontSize=20), sort=alt.EncodingSortField(field='MEDICAL_CONDITION', op='count', order='descending')),
+				    y=alt.Y('MEDICAL_CONDITION:N',axis=alt.Axis(grid=False, labelFontSize=20 , titleFontSize=20)),
 				    color=alt.Color('MEDICAL_CONDITION_Sentiment', scale=alt.Scale(domain=domain, range=range_),legend=alt.Legend(
 						orient='bottom',
 						#legendX=50, legendY=-40,
@@ -1350,7 +1350,7 @@ def func(choice):
 			def pie_chart(data):
 				plt.figure(figsize=[20,20])
 				var=data['sentiment'].value_counts()
-				plt.pie(x=var.values,labels=var.index,autopct='%1.2f%%',pctdistance=0.85, colors=['grey', 'pink','orange'],textprops={'fontsize': 25})
+				plt.pie(x=var.values,labels=var.index,autopct='%1.2f%%',pctdistance=0.85, colors=['grey', 'pink','orange'],textprops={'fontsize': 35})
 				#plt.title('Distribution of Sentiments', fontsize=15)
 				labels=var.index
 				centre_circle = plt.Circle((0, 0), 0.70, fc='white')
@@ -1363,10 +1363,10 @@ def func(choice):
 				#final_kic1 = final_kic['KIC-1_Pred'].drop(["OTHER","COSENTYX","HS","PSORIASIS"],axis=0)
 				data['KIC-1_Pred'].value_counts().drop(['HS','COSENTYX','OTHER',"PSORIASIS"],errors='ignore').plot(kind= 'bar')
 				#plt.title('Distribution of Intents', fontsize=25)
-				plt.xticks(rotation = 70,fontsize=15)
-				plt.yticks(fontsize=15)
-				plt.ylabel('Counts', fontsize=15)
-				plt.xlabel('Key Topics', fontsize=15)
+				plt.xticks(rotation = 70,fontsize=25)
+				plt.yticks(fontsize=25)
+				plt.ylabel('Counts', fontsize=25)
+				plt.xlabel('Key Topics', fontsize=25)
 				val=data['KIC-1_Pred'].value_counts().drop(['HS','COSENTYX','OTHER',"PSORIASIS"],errors='ignore')
 				for i in range(len(val)):
 				    plt.text(x=i-0.05,y=val.values[i]+0.05,s=str(val.values[i]),fontsize=15)
@@ -1380,10 +1380,10 @@ def func(choice):
 					val=data['Symptom/Side Effect'].value_counts()[:5]
 					for i in range(len(val)):
 					    plt.text(x=i-0.05,y=val.values[i]+0.05,s=str(val.values[i]),fontsize=15)
-				plt.xticks(rotation = 70,fontsize=15)
-				plt.yticks(fontsize=15)
-				plt.ylabel('Counts', fontsize=15)
-				plt.xlabel('Symptoms', fontsize=15)
+				plt.xticks(rotation = 70,fontsize=25)
+				plt.yticks(fontsize=25)
+				plt.ylabel('Counts', fontsize=25)
+				plt.xlabel('Symptoms', fontsize=25)
 				return plt
 			def medication_graph(data):
 				plt.figure(figsize=[15,8])
@@ -1395,10 +1395,10 @@ def func(choice):
 					val=data['MEDICATION'].value_counts()[:5]
 					for i in range(len(val)):
 					    plt.text(x=i-0.05,y=val.values[i]+0.05,s=str(val.values[i]),fontsize=15)
-				plt.xticks(rotation = 70,fontsize=15)
-				plt.yticks(fontsize=15)
-				plt.ylabel('Counts', fontsize=15)
-				plt.xlabel('Medication', fontsize=15)
+				plt.xticks(rotation = 70,fontsize=25)
+				plt.yticks(fontsize=25)
+				plt.ylabel('Counts', fontsize=25)
+				plt.xlabel('Medication', fontsize=25)
 				return plt				
 
 
