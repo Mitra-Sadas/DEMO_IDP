@@ -2,43 +2,40 @@ import streamlit as st
 st.set_page_config(layout="wide")
 import pandas as pd
 import io
+from io import BytesIO
 from pathlib import Path
 import recordlinkage
 import numpy as np
-from datetime import datetime
 import math
 from PIL import Image
-from selenium import webdriver
-from selenium.webdriver.chrome.options import Options
-from selenium.webdriver.common.keys import Keys
-from bs4 import BeautifulSoup
+#from selenium import webdriver
+#from selenium.webdriver.chrome.options import Options
+#from selenium.webdriver.common.keys import Keys
+#from bs4 import BeautifulSoup
 import re
 import preprocessor as prep
 from nameparser import HumanName
-from io import BytesIO
 from pyxlsb import open_workbook as open_xlsb
 import warnings
 warnings.filterwarnings("ignore")
 from time import sleep
 from wordcloud import WordCloud, STOPWORDS
-from datetime import datetime as dt
-from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
-import spacy
-import folium
+#from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
+#import spacy
+#import folium
 # d_c_base_spacy_model = spacy.load("en_ner_bc5cdr_md")
 # pgo_base_spacy_model = spacy.load("en_core_web_sm")
-import numpy as np
 from keras.preprocessing.text import Tokenizer
 from pathlib import Path
-import nltk
-from nltk.corpus import stopwords
+#import nltk
+#from nltk.corpus import stopwords
 #nltk.download('stopwords')
-from nltk.tokenize import word_tokenize
-import re
+#from nltk.tokenize import word_tokenize
+
 import tensorflow as tf
 import seaborn as sns
 np.random.seed()
-from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
+#from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
 from datetime import timedelta
 import tweepy
 from nameparser import HumanName
@@ -46,7 +43,8 @@ import datetime as dt
 from time import sleep
 import gender_guesser.detector as gender
 g = gender.Detector()
-
+#from pyxlsb import open_workbook as open_xlsb
+import altair as alt
 
 @st.cache(allow_output_mutation=True)
 def upload1(data, data2):
@@ -923,9 +921,10 @@ def func(choice):
 				st.dataframe(df.head())	
 		if len(df)>0:
 			with st.spinner("Searching through twitter and collecting handles, please wait..."):
-				sleep(1)
+				sleep(10)
 			#sm_handles = profilesearch(df.head())
-			sm_handles = pd.read_excel("https://github.com/Mitra-Sadas/Streamlit_Demo_Insights/blob/main/sm_handles.xlsx?raw=true")
+				sm_handles = pd.read_excel("https://github.com/rutujapednekar/NLP-Models-UI/blob/main/sm_handles.xlsx?raw=true")
+			#st.write(len(sm_handles))
 			#sm_handles.to_excel("sm_handles.xlsx", index=False, encoding='utf-8')
 
 			st.markdown("""
@@ -938,7 +937,6 @@ def func(choice):
 			   color: rgb(30, 103, 119);
 			   overflow-wrap: break-word;
 			}
-
 			/* breakline for metric text         */
 			div[data-testid="metric-container"] > label[data-testid="stMetricLabel"] > div {
 			   overflow-wrap: break-word;
@@ -974,7 +972,7 @@ def func(choice):
 			    unsafe_allow_html=True,
 			)
 			col3, col4 = st.columns(2)
-			col3.metric("",sm_handles.name.nunique(),"Number of HCPs searched for")
+			col3.metric("",len(df),"Number of HCPs searched for")
 			col4.metric("",len(sm_handles),"Number of Handles Fetched")
 			sm_handles['Platform'] = 'twitter'
 			if len(sm_handles)>0:
@@ -982,15 +980,28 @@ def func(choice):
 
 
 				with st.spinner("Collecting Full Profile information using Twitter API, Please wait...."):
-					sleep(1)
+					sleep(5)
 
 					#df = twittwe_api(sm_handles)
 					
-					df = pd.read_excel("https://github.com/Mitra-Sadas/Streamlit_Demo_Insights/blob/main/sm_full_profile.xlsx?raw=true")
+					df = pd.read_excel("sm_full_profile.xlsx")
+
+					#st.write(len(df))
 
 					#df.to_excel("sm_full_profile.xlsx", index=False, encoding='utf-8')
-
-				st.download_button(label="Download Twitter Profiles information",data=df.to_csv(index=False).encode('utf-8'),file_name="Twitter Profiles information.csv",mime='text/csv')
+					def to_excel(df):
+						output = BytesIO()
+						writer = pd.ExcelWriter(output, engine='xlsxwriter')
+						df.to_excel(writer, index=False, sheet_name='Sheet1')
+						workbook = writer.book
+						worksheet = writer.sheets['Sheet1']
+						format1 = workbook.add_format({'num_format': '0.00'}) 
+						worksheet.set_column('A:A', None, format1)  
+						writer.save()
+						processed_data = output.getvalue()
+						return processed_data
+					df = to_excel(df)
+				st.download_button(label="Download Twitter Profiles information",data=df,file_name="Twitter Profiles information.xlsx",mime='xlsx')
 
 
 	if choice =='Social Media Handle Mapping':
@@ -1074,6 +1085,7 @@ def func(choice):
 					placeholder.empty()
 		if len(d)>0:
 			#d = d.head(2)
+
 			def f_word_cloud(column):
 			    comment_words = ' '
 			    stopwords = set(STOPWORDS)
@@ -1309,6 +1321,32 @@ def func(choice):
 				plt.axis("off") 
 				plt.tight_layout(pad = 0)
 				return plt
+			def absa_chart(df):
+				df = df[~df['MEDICAL_CONDITION'].isnull()]
+				dftest = df.groupby(['MEDICAL_CONDITION'])['MEDICAL_CONDITION'].count().reset_index(name='Count').sort_values(['Count'], ascending=False)[0:10]
+				df = df[df['MEDICAL_CONDITION'].isin(list(dftest['MEDICAL_CONDITION'].unique()))]
+				domain  = ['Positive', 'Negative', 'Neutral']
+				range_ = ['green','red','orange']
+				bars = alt.Chart(df).mark_bar().encode(
+				    x=alt.X('count(MEDICAL_CONDITION):Q', stack='zero', axis=alt.Axis(title='Count',grid=False, format='.0f',tickMinStep=1), sort=alt.EncodingSortField(field='MEDICAL_CONDITION', op='count', order='descending')),
+				    y=alt.Y('MEDICAL_CONDITION:N',axis=alt.Axis(grid=False)),
+				    color=alt.Color('MEDICAL_CONDITION_Sentiment', scale=alt.Scale(domain=domain, range=range_),legend=alt.Legend(
+						orient='bottom',
+						#legendX=50, legendY=-40,
+						direction='horizontal',
+						titleAnchor='middle'))
+				)
+				text = alt.Chart(df).mark_text(dx=-15, dy=3, color='white', size=15).encode(
+					x=alt.X('count(MEDICAL_CONDITION):Q', stack='zero'),
+					y=alt.Y('MEDICAL_CONDITION:N'),
+					detail='MEDICAL_CONDITION_Sentiment:N',
+					text=alt.Text('count(MEDICAL_CONDITION):Q', format='.0f')
+				)
+				c = bars + text
+				c.height=230
+				c.save('absachart.png')
+				
+				#return c
 			def pie_chart(data):
 				plt.figure(figsize=[20,20])
 				var=data['sentiment'].value_counts()
@@ -1323,16 +1361,48 @@ def func(choice):
 			def kic_graph(data):
 				plt.figure(figsize=[15,8])
 				#final_kic1 = final_kic['KIC-1_Pred'].drop(["OTHER","COSENTYX","HS"],axis=0)
-				data['KIC-1_Pred'].value_counts().drop(['HS','COSENTYX','OTHER']).plot(kind= 'bar')
+				data['KIC-1_Pred'].value_counts().drop(['HS','COSENTYX','OTHER'],errors='ignore').plot(kind= 'bar')
 				#plt.title('Distribution of Intents', fontsize=25)
 				plt.xticks(rotation = 70,fontsize=15)
 				plt.yticks(fontsize=15)
 				plt.ylabel('Counts', fontsize=15)
 				plt.xlabel('KIC', fontsize=15)
-				val=data['KIC-1_Pred'].value_counts().drop(['HS','COSENTYX','OTHER'])
+				val=data['KIC-1_Pred'].value_counts().drop(['HS','COSENTYX','OTHER'],errors='ignore')
 				for i in range(len(val)):
 				    plt.text(x=i-0.05,y=val.values[i]+0.05,s=str(val.values[i]),fontsize=15)
 				return plt
+			def symptom_graph(data):
+				plt.figure(figsize=[15,8])
+				if len(data)>0:
+					#final_kic1 = final_kic['KIC-1_Pred'].drop(["OTHER","COSENTYX","HS"],axis=0)
+					data['Symptom/Side Effect'].value_counts()[:5].plot(kind= 'bar')
+					#plt.title('Distribution of Intents', fontsize=25)
+					val=data['Symptom/Side Effect'].value_counts()[:5]
+					for i in range(len(val)):
+					    plt.text(x=i-0.05,y=val.values[i]+0.05,s=str(val.values[i]),fontsize=15)
+				plt.xticks(rotation = 70,fontsize=15)
+				plt.yticks(fontsize=15)
+				plt.ylabel('Counts', fontsize=15)
+				plt.xlabel('Symptoms', fontsize=15)
+				return plt
+			def medication_graph(data):
+				plt.figure(figsize=[15,8])
+				if len(data)>0:
+					#final_kic1 = final_kic['KIC-1_Pred'].drop(["OTHER","COSENTYX","HS"],axis=0)
+					data['MEDICATION'].value_counts()[:5].plot(kind= 'bar')
+					#plt.title('Distribution of Intents', fontsize=25)
+
+					val=data['MEDICATION'].value_counts()[:5]
+					for i in range(len(val)):
+					    plt.text(x=i-0.05,y=val.values[i]+0.05,s=str(val.values[i]),fontsize=15)
+				plt.xticks(rotation = 70,fontsize=15)
+				plt.yticks(fontsize=15)
+				plt.ylabel('Counts', fontsize=15)
+				plt.xlabel('Medication', fontsize=15)
+				return plt				
+
+
+
 			def country(data):
 				plt.figure(figsize=[15,8])
 				val = data.Country.value_counts()
@@ -1434,14 +1504,24 @@ def func(choice):
 
 			# df.to_excel("HCP_tweets.xlsx", index=False, encoding='utf-8')
 			
-			df = pd.read_excel("HCP_KIC.xlsx")
+			df = pd.read_excel("https://github.com/rutujapednekar/NLP-Models-UI/blob/main/HCP_KIC.xlsx?raw=true")
 			df['tweeted_time'] = pd.to_datetime(df['tweeted_time'])
 			df['date'] = pd.to_datetime(df['date'])
 			data1 = df
+
+			asbadf = pd.read_excel("https://github.com/rutujapednekar/NLP-Models-UI/blob/main/absa_sentiment_v3%20Medical%20Condition.xlsx?raw=true")
+			asbadf1 = asbadf
+
+			symdf = pd.read_excel("https://github.com/rutujapednekar/NLP-Models-UI/blob/main/absa_sentiment_v3%20Symptom.xlsx?raw=true")
+			symdf1 = symdf
+
+			meddf = pd.read_excel("https://github.com/rutujapednekar/NLP-Models-UI/blob/main/absa_sentiment_v3%20Medication.xlsx?raw=true")
+			meddf1 = meddf			
+
 			#st.dataframe(data1)
 			with st.spinner("Analysing the Data"):
 				import matplotlib.pyplot as plt
-				nltk.download('stopwords')
+				#nltk.download('stopwords')
 				# d_c_base_spacy_model = spacy.load("en_ner_bc5cdr_md")
 				# pgo_base_spacy_model = spacy.load("en_core_web_sm")
 
@@ -1449,10 +1529,23 @@ def func(choice):
 			data1['HCP Name'] = "Dr. "+ data1['Full_Name']
 			if df is not None:
 				#selection_list = list(data1['HCP Name'].unique()[:5])
-				selection_list = list(data1['HCP Name'].value_counts()[(data1['HCP Name'].value_counts()>50) & (data1['HCP Name'].value_counts()<80)].index[:5])
+				selection_list = list(data1['HCP Name'].value_counts()[(data1['HCP Name'].value_counts()>35) & (data1['HCP Name'].value_counts()<95)].index[:20])
 				#selection_list = list(["Dr. Bryan Hambley","Dr. Alice Mims","Dr. Erel Joffe"])
 				selection_list.insert(0,"ALL")
 				selection_list.insert(0," ")
+				try:
+					selection_list.remove('Dr. Jamie Ford')
+				except:
+					pass
+				try:
+					selection_list.remove('Dr. Dr. Elizabeth Jaffee')
+				except:
+					pass
+				try:
+					selection_list.remove('Dr. Dorene Boydston NP')
+				except:
+					pass
+
 				#st.write(selection_list)
 				#col21,col22,col23 = st.columns(3) 
 				placeholder = st.empty()
@@ -1462,8 +1555,16 @@ def func(choice):
 					placeholder.empty()
 					if hcpname == "ALL":
 						data = data1
+						asbadf = asbadf1
+						symdf = symdf1
+						meddf = meddf1
 					else:
 						data = data1[data1['HCP Name']==hcpname]
+						handlefilter = data['handle'].unique()[0]
+						#st.write(handlefil)
+						asbadf = asbadf1[asbadf1['Handle']==handlefilter]
+						symdf = symdf1[symdf1['Handle']==handlefilter]						
+						meddf = meddf1[meddf1['Handle']==handlefilter]
 
 					with st.spinner("Ploting the Graphs"):
 						#st.write(data.columns)
@@ -1482,7 +1583,6 @@ def func(choice):
 						   color: rgb(30, 103, 119);
 						   overflow-wrap: break-word;
 						}
-
 						/* breakline for metric text         */
 						div[data-testid="metric-container"] > label[data-testid="stMetricLabel"] > div {
 						   overflow-wrap: break-word;
@@ -1561,13 +1661,18 @@ def func(choice):
 						st.markdown("""---""")
 						col5, col6  = st.columns(2)
 						with col5:
+							#st.write(st.get_container_width)
 							#st.write("ABSA Plot:")
 							#st.write("")
 							#st.write("**Whats the distribution of content**:question:")
-							st.markdown('**<p style="font-size:20px;border-radius:2%;text-align:center;">Whats the distribution of content:question:</p>**',unsafe_allow_html=True)
-							absaplot = Image.open('ABSA_graph1.png')
-							st.image(absaplot, clamp=False, channels="RGB", output_format="auto")
-
+							st.markdown('**<p style="font-size:20px;border-radius:2%;text-align:center;">What are the key Medical conditions discussed:question:</p>**',unsafe_allow_html=True)
+							with st.spinner("Running ASBA Model..."):
+								c = absa_chart(asbadf)
+							absaplot = Image.open('absachart.png')
+							st.image(absaplot, clamp=False, channels="RGB", use_column_width=True)
+							#st.dataframe(asbadf.head())
+							
+							#st.altair_chart(c, use_container_width=True)
 						#final_kic = KIC_Predction_Pipeline(data)
 
 						#final_kic.to_excel("HCP_KIC.xlsx", index=False, encoding='utf-8')
@@ -1582,6 +1687,18 @@ def func(choice):
 							plt = kic_graph(data)
 							st.pyplot(plt)
 
+						col7, col8 = st.columns(2)
+
+						with col7:
+							st.markdown('**<p style="font-size:20px;border-radius:2%;text-align:center;">What are the Key Symptoms mentioned:question:</p>**',unsafe_allow_html=True)
+							plt = symptom_graph(symdf)
+							st.pyplot(plt)							
+
+
+						with col8:
+							st.markdown('**<p style="font-size:20px;border-radius:2%;text-align:center;">What are the Key Medications discussed:question:</p>**',unsafe_allow_html=True)
+							plt = medication_graph(meddf)
+							st.pyplot(plt)
 
 						st.markdown("""---""")
 	
@@ -1590,5 +1707,4 @@ def func(choice):
 
 func(choice)
 
-			
-
+		
