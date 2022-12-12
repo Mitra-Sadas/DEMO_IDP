@@ -1329,14 +1329,14 @@ def func(choice):
 				range_ = ['green','red','orange']
 				bars = alt.Chart(df).mark_bar().encode(
 				    x=alt.X('count(MEDICAL_CONDITION):Q', stack='zero', axis=alt.Axis(title='Count',grid=False, format='.0f',tickMinStep=1, labelFontSize=20 , titleFontSize=20), sort=alt.EncodingSortField(field='MEDICAL_CONDITION', op='count', order='descending')),
-				    y=alt.Y('MEDICAL_CONDITION:N',axis=alt.Axis(grid=False, labelFontSize=20 , titleFontSize=20)),
+				    y=alt.Y('MEDICAL_CONDITION:N',axis=alt.Axis(grid=False, labelFontSize=15 , titleFontSize=15)),
 				    color=alt.Color('MEDICAL_CONDITION_Sentiment', scale=alt.Scale(domain=domain, range=range_),legend=alt.Legend(
 						orient='bottom',
 						#legendX=50, legendY=-40,
 						direction='horizontal',
 						titleAnchor='middle'))
 				)
-				text = alt.Chart(df).mark_text(dx=-15, dy=3, color='white', size=15).encode(
+				text = alt.Chart(df).mark_text(dx=-15, dy=3, color='white', size=10).encode(
 					x=alt.X('count(MEDICAL_CONDITION):Q', stack='zero'),
 					y=alt.Y('MEDICAL_CONDITION:N'),
 					detail='MEDICAL_CONDITION_Sentiment:N',
