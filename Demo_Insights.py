@@ -1360,14 +1360,14 @@ def func(choice):
 				return plt
 			def kic_graph(data):
 				plt.figure(figsize=[15,8])
-				#final_kic1 = final_kic['KIC-1_Pred'].drop(["OTHER","COSENTYX","HS"],axis=0)
-				data['KIC-1_Pred'].value_counts().drop(['HS','COSENTYX','OTHER'],errors='ignore').plot(kind= 'bar')
+				#final_kic1 = final_kic['KIC-1_Pred'].drop(["OTHER","COSENTYX","HS","PSORIASIS"],axis=0)
+				data['KIC-1_Pred'].value_counts().drop(['HS','COSENTYX','OTHER',"PSORIASIS"],errors='ignore').plot(kind= 'bar')
 				#plt.title('Distribution of Intents', fontsize=25)
 				plt.xticks(rotation = 70,fontsize=15)
 				plt.yticks(fontsize=15)
 				plt.ylabel('Counts', fontsize=15)
 				plt.xlabel('KIC', fontsize=15)
-				val=data['KIC-1_Pred'].value_counts().drop(['HS','COSENTYX','OTHER'],errors='ignore')
+				val=data['KIC-1_Pred'].value_counts().drop(['HS','COSENTYX','OTHER',"PSORIASIS"],errors='ignore')
 				for i in range(len(val)):
 				    plt.text(x=i-0.05,y=val.values[i]+0.05,s=str(val.values[i]),fontsize=15)
 				return plt
