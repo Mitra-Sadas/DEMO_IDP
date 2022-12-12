@@ -1343,7 +1343,7 @@ def func(choice):
 					text=alt.Text('count(MEDICAL_CONDITION):Q', format='.0f')
 				)
 				c = bars + text
-				c.height=230
+				c.height=320
 				#c.save('absachart.png')
 				
 				return c
