@@ -1344,9 +1344,9 @@ def func(choice):
 				)
 				c = bars + text
 				c.height=230
-				c.save('absachart.png')
+				#c.save('absachart.png')
 				
-				#return c
+				return c
 			def pie_chart(data):
 				plt.figure(figsize=[20,20])
 				var=data['sentiment'].value_counts()
@@ -1668,11 +1668,11 @@ def func(choice):
 							st.markdown('**<p style="font-size:20px;border-radius:2%;text-align:center;">What are the key Medical conditions discussed:question:</p>**',unsafe_allow_html=True)
 							with st.spinner("Running ASBA Model..."):
 								c = absa_chart(asbadf)
-							absaplot = Image.open('absachart.png')
-							st.image(absaplot, clamp=False, channels="RGB", use_column_width=True)
+							#absaplot = Image.open('absachart.png')
+							#st.image(absaplot, clamp=False, channels="RGB", use_column_width=True)
 							#st.dataframe(asbadf.head())
 							
-							#st.altair_chart(c, use_container_width=True)
+							st.altair_chart(c, use_container_width=True)
 						#final_kic = KIC_Predction_Pipeline(data)
 
 						#final_kic.to_excel("HCP_KIC.xlsx", index=False, encoding='utf-8')
