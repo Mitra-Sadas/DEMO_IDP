@@ -1504,7 +1504,7 @@ def func(choice):
 
 			# df.to_excel("HCP_tweets.xlsx", index=False, encoding='utf-8')
 			
-			df = pd.read_excel("https://github.com/rutujapednekar/NLP-Models-UI/blob/main/HCP_KIC.xlsx?raw=true")
+			df = pd.read_excel("https://github.com/Mitra-Sadas/Streamlit_Demo_Insights/blob/main/HCP_KIC.xlsx?raw=true")
 			df['tweeted_time'] = pd.to_datetime(df['tweeted_time'])
 			df['date'] = pd.to_datetime(df['date'])
 			data1 = df
