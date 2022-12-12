@@ -1323,7 +1323,7 @@ def func(choice):
 				return plt
 			def absa_chart(df):
 				df = df[~df['MEDICAL_CONDITION'].isnull()]
-				df = [df['MEDICAL_CONDITION'] !='Cancer']
+				#df = [df['MEDICAL_CONDITION'] !='Cancer']
 				dftest = df.groupby(['MEDICAL_CONDITION'])['MEDICAL_CONDITION'].count().reset_index(name='Count').sort_values(['Count'], ascending=False)[0:10]
 				df = df[df['MEDICAL_CONDITION'].isin(list(dftest['MEDICAL_CONDITION'].unique()))]
 				domain  = ['Positive', 'Negative', 'Neutral']
