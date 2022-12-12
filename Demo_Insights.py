@@ -1306,12 +1306,12 @@ def func(choice):
 				top5_hashtag=data['Insight'].str.extract(r"#(\w+)")[0].str.lower().value_counts().sort_values(ascending=False)[0:5].sort_values()
 				plt.barh(y='#'+top5_hashtag.index,width=top5_hashtag.values)
 				#plt.title('Top 5 hashtags', fontsize=25)
-				plt.ylabel('Hashtags', fontsize=15)
-				plt.xlabel('Counts', fontsize=15)
-				plt.xticks(fontsize=15)
-				plt.yticks(fontsize=15)
+				plt.ylabel('Hashtags', fontsize=20)
+				plt.xlabel('Counts', fontsize=20)
+				plt.xticks(fontsize=20)
+				plt.yticks(fontsize=20)
 				for i in range(len(top5_hashtag)):
-				    plt.text(y=i,x=top5_hashtag.values[i]+0.1,s=str(top5_hashtag.values[i]),fontsize=15)
+				    plt.text(y=i,x=top5_hashtag.values[i]+0.1,s=str(top5_hashtag.values[i]),fontsize=20)
 				return plt
 			def wcloud(data):
 				wordcloud = f_word_cloud(data['Insight_word_cloud'])
@@ -1366,7 +1366,7 @@ def func(choice):
 				plt.xticks(rotation = 70,fontsize=15)
 				plt.yticks(fontsize=15)
 				plt.ylabel('Counts', fontsize=15)
-				plt.xlabel('KIC', fontsize=15)
+				plt.xlabel('Key Topics', fontsize=15)
 				val=data['KIC-1_Pred'].value_counts().drop(['HS','COSENTYX','OTHER',"PSORIASIS"],errors='ignore')
 				for i in range(len(val)):
 				    plt.text(x=i-0.05,y=val.values[i]+0.05,s=str(val.values[i]),fontsize=15)
