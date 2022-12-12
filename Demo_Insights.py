@@ -1311,7 +1311,7 @@ def func(choice):
 				plt.xticks(fontsize=25)
 				plt.yticks(fontsize=25)
 				for i in range(len(top5_hashtag)):
-				    plt.text(y=i,x=top5_hashtag.values[i]+0.1,s=str(top5_hashtag.values[i]),fontsize=20)
+				    plt.text(y=i,x=top5_hashtag.values[i]+0.1,s=str(top5_hashtag.values[i]),fontsize=25)
 				return plt
 			def wcloud(data):
 				wordcloud = f_word_cloud(data['Insight_word_cloud'])
@@ -1370,7 +1370,7 @@ def func(choice):
 				plt.xlabel('Key Topics', fontsize=25)
 				val=data['KIC-1_Pred'].value_counts().drop(['HS','COSENTYX','OTHER',"PSORIASIS"],errors='ignore')
 				for i in range(len(val)):
-				    plt.text(x=i-0.05,y=val.values[i]+0.05,s=str(val.values[i]),fontsize=15)
+				    plt.text(x=i-0.05,y=val.values[i]+0.05,s=str(val.values[i]),fontsize=25)
 				return plt
 			def symptom_graph(data):
 				plt.figure(figsize=[15,8])
@@ -1380,7 +1380,7 @@ def func(choice):
 					#plt.title('Distribution of Intents', fontsize=25)
 					val=data['Symptom/Side Effect'].value_counts()[:5]
 					for i in range(len(val)):
-					    plt.text(x=i-0.05,y=val.values[i]+0.05,s=str(val.values[i]),fontsize=15)
+					    plt.text(x=i-0.05,y=val.values[i]+0.05,s=str(val.values[i]),fontsize=25)
 				plt.xticks(rotation = 70,fontsize=25)
 				plt.yticks(fontsize=25)
 				plt.ylabel('Counts', fontsize=25)
@@ -1395,7 +1395,7 @@ def func(choice):
 
 					val=data['MEDICATION'].value_counts()[:5]
 					for i in range(len(val)):
-					    plt.text(x=i-0.05,y=val.values[i]+0.05,s=str(val.values[i]),fontsize=15)
+					    plt.text(x=i-0.05,y=val.values[i]+0.05,s=str(val.values[i]),fontsize=25)
 				plt.xticks(rotation = 70,fontsize=25)
 				plt.yticks(fontsize=25)
 				plt.ylabel('Counts', fontsize=25)
