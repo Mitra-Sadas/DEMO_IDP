@@ -923,7 +923,7 @@ def func(choice):
 			with st.spinner("Searching through twitter and collecting handles, please wait..."):
 				sleep(10)
 			#sm_handles = profilesearch(df.head())
-				sm_handles = pd.read_excel("https://github.com/rutujapednekar/NLP-Models-UI/blob/main/sm_handles.xlsx?raw=true")
+				sm_handles = pd.read_excel("https://github.com/Mitra-Sadas/Streamlit_Demo_Insights/blob/main/sm_handles.xlsx?raw=true")
 			#st.write(len(sm_handles))
 			#sm_handles.to_excel("sm_handles.xlsx", index=False, encoding='utf-8')
 
@@ -984,7 +984,7 @@ def func(choice):
 
 					#df = twittwe_api(sm_handles)
 					
-					df = pd.read_excel("sm_full_profile.xlsx")
+					df = pd.read_excel("https://github.com/Mitra-Sadas/Streamlit_Demo_Insights/blob/main/sm_full_profile.xlsx?raw=true")
 
 					#st.write(len(df))
 
@@ -1509,13 +1509,13 @@ def func(choice):
 			df['date'] = pd.to_datetime(df['date'])
 			data1 = df
 
-			asbadf = pd.read_excel("https://github.com/rutujapednekar/NLP-Models-UI/blob/main/absa_sentiment_v3%20Medical%20Condition.xlsx?raw=true")
+			asbadf = pd.read_excel("https://github.com/Mitra-Sadas/Streamlit_Demo_Insights/blob/main/absa_sentiment_v3%20Medical%20Condition.xlsx?raw=true")
 			asbadf1 = asbadf
 
-			symdf = pd.read_excel("https://github.com/rutujapednekar/NLP-Models-UI/blob/main/absa_sentiment_v3%20Symptom.xlsx?raw=true")
+			symdf = pd.read_excel("https://github.com/Mitra-Sadas/Streamlit_Demo_Insights/blob/main/absa_sentiment_v3%20Symptom.xlsx?raw=true")
 			symdf1 = symdf
 
-			meddf = pd.read_excel("https://github.com/rutujapednekar/NLP-Models-UI/blob/main/absa_sentiment_v3%20Medication.xlsx?raw=true")
+			meddf = pd.read_excel("https://github.com/Mitra-Sadas/Streamlit_Demo_Insights/blob/main/absa_sentiment_v3%20Medication.xlsx?raw=true")
 			meddf1 = meddf			
 
 			#st.dataframe(data1)
