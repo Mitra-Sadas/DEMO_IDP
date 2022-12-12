@@ -1323,6 +1323,7 @@ def func(choice):
 				return plt
 			def absa_chart(df):
 				df = df[~df['MEDICAL_CONDITION'].isnull()]
+				df['MEDICAL_CONDITION'] = df['MEDICAL_CONDITION'].drop(["Cancer"], axis=0)
 				dftest = df.groupby(['MEDICAL_CONDITION'])['MEDICAL_CONDITION'].count().reset_index(name='Count').sort_values(['Count'], ascending=False)[0:10]
 				df = df[df['MEDICAL_CONDITION'].isin(list(dftest['MEDICAL_CONDITION'].unique()))]
 				domain  = ['Positive', 'Negative', 'Neutral']
@@ -1336,7 +1337,7 @@ def func(choice):
 						direction='horizontal',
 						titleAnchor='middle'))
 				)
-				text = alt.Chart(df).mark_text(dx=-15, dy=3, color='white', size=10).encode(
+				text = alt.Chart(df).mark_text(dx=0, dy=3, color='white', size=15).encode(
 					x=alt.X('count(MEDICAL_CONDITION):Q', stack='zero'),
 					y=alt.Y('MEDICAL_CONDITION:N'),
 					detail='MEDICAL_CONDITION_Sentiment:N',
