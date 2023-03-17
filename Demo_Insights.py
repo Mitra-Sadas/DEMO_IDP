@@ -2455,7 +2455,7 @@ def func(choice):
 			scoring.loc[(scoring['Decile']>=4) & (scoring['Decile']<8),'Segmentation']='Medium'
 			scoring.loc[scoring['Decile']>=8,'Segmentation']='High'
 		placeholder.text("Deciling ✔️")
-		scoring_sample['twitter url'].replace({'0':""},inplace=True)
+		scoring['twitter url'].replace({'0':""},inplace=True)
 		scoring_sample = scoring[['Customer/Account Name', 'External ID','twitter url','Linkedin_Url','Instagram ID','Facebook URL','Youtube Links'
 		        ,'Conference Presence Score','Digital Events Participation','Segmentation']]
 		scoring_sample.rename(columns={'Conference Presence Score':'Conference Participation'},inplace=True)
