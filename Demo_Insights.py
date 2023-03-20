@@ -782,7 +782,7 @@ def to_excel(df):
 
 image = Image.open('Indegene_Logo.png')
 st.sidebar.image(image, width=200, clamp=False, channels="RGB", output_format="auto")
-activities = ["Data Collection", "Social Media Handle Mapping", "Affinity Calculation"]
+activities = ["Data Collection", "Social Media Handle Mapping", "Affinity Calculation","Insights"]
 choice = st.sidebar.selectbox("Select Activity", activities, key='sel1')
 
 
