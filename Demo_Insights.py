@@ -782,7 +782,7 @@ def to_excel(df):
 
 image = Image.open('Indegene_Logo.png')
 st.sidebar.image(image, width=200, clamp=False, channels="RGB", output_format="auto")
-activities = ["Data Collection", "Social Media Handle Mapping", "Affinity Calculation","Insights"]
+activities = ["Data Collection", "Social Media Handle Mapping", "Affinity Calculation"]
 choice = st.sidebar.selectbox("Select Activity", activities, key='sel1')
 
 
@@ -1546,6 +1546,9 @@ def get_youtube_scores(scoring,youtube,weightagefile):
 	                                  row['Scores - Relevancy_youtube']*weightages.loc[weightages['Parameters'] == 'Scores - Relevancy_youtube', 'Weightage'].iloc[0], axis=1)
 	return scoring,youtubeweightage
     
+def get_user_tweet_profile(d):
+	client = tweepy.Client(bearer_token='AAAAAAAAAAAAAAAAAAAAABYZgwEAAAAAb4tPJ1oHg5LIABwh6d9LWszHsho%3DUm7PFhkU4uuBrVPq3PT3jgUZxeUsJb52zaLlosv7pXLxv9ch93')
+
 
 
 def func(choice):
@@ -2330,145 +2333,78 @@ def func(choice):
 
 	if choice == "Affinity Calculation":
 		#st.write("work in progress")
+		plchld = st.empty()
+		check = plchld.checkbox("Please check here to use the Match File from Name Matching Model")
+		if check:
+			#d = st.session_state.flag
+			plchld.empty()
+			with st.spinner("Reading the file, please wait..."):
+				sleep(2)
+				d=pd.read_excel("Matching HCPs.xlsx")
 
-		col1, col2 = st.columns(2)
-		with col1:
-			filename = st.file_uploader("Upload HCP Target File",type=["xlsx"])
+				if d is None:
+					st.write("Please Navigate to Social Media Handle Mapping Tab to get the Matching HCP file")
+				else:
+					pass
+			with st.spinner("scoring in progress, please wait..."):
+				sleep(2)
+				filename = r'C:\Users\sadasivuni.mitra\Downloads\NLP Streamlit Models\NLP MOdel9Dec22\Matching HCPs.xlsx'
+				weightagefile = 'Weightages_UK_2.xlsx'
+				scoring = pd.read_excel(filename, sheet_name='Scoring Sheet')
+				scoring = scoring.fillna('')
+				print("Twitter")
+				twittertweetsdata = pd.read_excel(filename, sheet_name='Twitter Tweets Data')
+				twitteruserdetails = pd.read_excel(filename, sheet_name='Twitter User Details')
+				scoring,twitterweightage = get_twitter_scores(scoring,twittertweetsdata,twitteruserdetails,weightagefile)
+				scoring['Overall Affinity Scores'] = scoring['Total Score_twitter']
 			
-		with col2:
-			weightagefile = st.file_uploader("Upload Scoring Weightages",type=["xlsx"])
+			with st.spinner("Deciling and Segmentation of HCPs, please wait..."):
+				sleep(2)
+				deciledf = scoring[['External ID','Overall Affinity Scores']]
+				deciledf = deciledf.sort_values(['Overall Affinity Scores'], ascending=False).reset_index(drop=True)
+				oa_sum = deciledf['Overall Affinity Scores'].sum()
+				cshare = 0
+				share = []
+				for i in deciledf['Overall Affinity Scores']:
+				    cshare=cshare+i/oa_sum
+				    share.append(cshare)
+				deciledf['C.Share'] = share
 
-		if filename is None or weightagefile is None:
-			st.stop()
-		else:
-			pass
+				D=10
+				deciledf['Decile']=0
+				for i in range(len(deciledf)):
+				    if deciledf['Overall Affinity Scores'].iloc[i] != 0:
+				        if deciledf['C.Share'].iloc[i]> (11-D)*0.1:
+				            deciledf.Decile.iloc[i] = D-1
+				            D = deciledf.Decile.iloc[i]
+				        else:
+				            deciledf.Decile.iloc[i] = D 
+				    else:
+				        deciledf.Decile.iloc[i] = 0
+				scoring = pd.merge(scoring,deciledf[['External ID','Decile']], on='External ID', how='left')
 
-		placeholder = st.empty()
+				scoring['Segmentation'] = ""
+				scoring.loc[scoring['Decile']==0,'Segmentation']='No Digital Presence'
+				scoring.loc[(scoring['Decile']>0) & (scoring['Decile']<4),'Segmentation']='Low'
+				scoring.loc[(scoring['Decile']>=4) & (scoring['Decile']<8),'Segmentation']='Medium'
+				scoring.loc[scoring['Decile']>=8,'Segmentation']='High'
+				scoring['External ID'] = scoring['External ID'].astype(str)
+				text_col = list(scoring.describe(include='O').columns)
+				num_col = list(scoring.describe(include=np.number).columns)
+				scoring[text_col] = scoring[text_col].astype(str)
+				scoring[num_col] = scoring[num_col].astype(np.number)
+			
+			scoring_sample = scoring[['External ID','PersonFirstName_hcp','PersonMiddleName_hcp','PersonLastName_hcp','twitter url','Overall Affinity Scores','Decile','Segmentation']]
 
-		with st.spinner("Reading Files, please wait..."):
-			scoring = pd.read_excel(filename, sheet_name='Scoring Sheet', usecols='A:AA')
-			scoring = scoring.fillna('')
-		with st.spinner("Calculating Twitter Scores, please wait..."):
-			#st.write("Twitter")
-			twittertweetsdata = pd.read_excel(filename, sheet_name='Twitter Tweets Data')
-			twitteruserdetails = pd.read_excel(filename, sheet_name='Twitter User Details')
-			scoring,twitterweightage = get_twitter_scores(scoring,twittertweetsdata,twitteruserdetails,weightagefile)
-		placeholder.text("Twitter ✔️")
-		with st.spinner("Calculating Linkedin Scores, please wait..."):
-			#st.write("LinkedIn")
-			lnprofile = pd.read_excel(filename, sheet_name='LinkedIN_Profile')
-			lnactivity = pd.read_excel(filename, sheet_name='Linkedin Activity')
-			lnposts = pd.read_excel(filename, sheet_name='Linkedin Posts')
-			scoring,linkedinweightage = get_linkedin_scores(scoring, lnprofile, lnactivity, lnposts,weightagefile)
-			scoring[['Final_Twitter','twitter url','twitterhandle']] = scoring[['Final_Twitter','twitter url','twitterhandle']].astype(str)
-		placeholder.text("Linkedin ✔️")
-		
-		with st.spinner("Calculating Instagram Scores, please wait..."):
-			#st.write("Instagram")
-			#import instagram sheet
-			insta = pd.read_excel(filename, sheet_name='Instagram')
-			#run instagram funtion
-			scoring,instagramweightage=get_instagram_scores(scoring,insta,weightagefile)
-		placeholder.text("Instagram ✔️")
+			st.write("Deciling And HCP Segmentation:")
+			st.dataframe(scoring_sample.sample(10))
+			st.write("Graphical Representation:")
+			fig = px.histogram(scoring,x = 'Segmentation',text_auto=True)
+			st.plotly_chart(fig)
+			st.write("")
+			scoring_xl = to_excel(scoring)
+			st.download_button(label="Download Deciling and Segmentation Sheet",data=scoring_xl,file_name="Deciling and Segmentation Sheet.xlsx",mime='xlsx')
 
-		with st.spinner("Calculating Facebook Scores, please wait..."):
-			#st.write("Facebook")
-			#import facebook sheet
-			fb = pd.read_excel(filename, sheet_name='Facebook')
-			#run facebook funtion
-			scoring,Facebookweightage=get_facebook_scores(scoring,fb,weightagefile)
-		placeholder.text("Facebook ✔️")
-
-		with st.spinner("Calculating Youtube Scores, please wait..."):
-			#import youtube sheet
-			#st.write('Youtube')
-			youtube=pd.read_excel(filename, sheet_name='Youtube')
-			# run you tube sheet
-			scoring,youtubeweightage=get_youtube_scores(scoring,youtube,weightagefile)
-		placeholder.text("Youtube ✔️")
-
-		with st.spinner("Calculating Conference Scores, please wait..."):
-			#st.write('Conference')
-			#import Conference sheet
-			conferencemaster=pd.read_excel(filename, sheet_name='Conference')
-			#run conference function
-			scoring,conferenceweightage=get_Conference_scores(scoring,conferencemaster,weightagefile)
-		placeholder.text("Conference ✔️")
-
-		with st.spinner("Calculating Digital Events Scores, please wait..."):
-			#st.write('Digital')
-			#import Digital Sheet
-			digitalmaster=pd.read_excel(filename, sheet_name='Digital Events')
-			#run digital Function
-			scoring,digitaleventweightage=get_Digital_scores(scoring,digitalmaster,weightagefile)
-		placeholder.text("Digital Events ✔️")
-
-		with st.spinner("Calculating the Overall Affinity Scores, please wait..."):
-			scoring[['Total Score_twitter','Total Score_linkedin','Total Score_youtube','Total Score_instagram','Total Score_Facebook','Total Score_conferences','Total Score_digital']] = scoring[['Total Score_twitter','Total Score_linkedin','Total Score_youtube','Total Score_instagram','Total Score_Facebook','Total Score_conferences','Total Score_digital']].replace([""],[0])
-			scoring['Total Score_social_media'] = scoring.apply(lambda row: row['Total Score_twitter']*twitterweightage + 
-			                                       row['Total Score_linkedin']*linkedinweightage +
-			                                       row['Total Score_youtube']*youtubeweightage +
-			                                       row['Total Score_Facebook']*Facebookweightage +
-			                                       row['Total Score_instagram']*instagramweightage, axis=1)
-			scoring['Total Score_digital_activity'] = scoring.apply(lambda row: row['Total Score_conferences']*conferenceweightage + 
-			                                       row['Total Score_digital']*digitaleventweightage , axis=1)
-
-			weightages = pd.read_excel(weightagefile, sheet_name='Affinity')
-
-			scoring['Overall Affinity Scores'] = scoring.apply(lambda row: row['Total Score_social_media']*weightages.loc[weightages['Parameters'] == 'Total Score_social_media', 'Weightage'].iloc[0] + 
-	                                       row['Total Score_digital_activity']*weightages.loc[weightages['Parameters'] == 'Total Score_digital_activity', 'Weightage'].iloc[0] , axis=1)
-		placeholder.text("Overall Affinity ✔️")
-
-		with st.spinner("Bucketing HCPs into Deciles and Segmentation, please waiting..."):
-			#st.write("Deciling")
-			deciledf = scoring[['External ID','Overall Affinity Scores']]
-			deciledf = deciledf.sort_values(['Overall Affinity Scores'], ascending=False).reset_index(drop=True)
-			oa_sum = deciledf['Overall Affinity Scores'].sum()
-			cshare = 0
-			share = []
-			for i in deciledf['Overall Affinity Scores']:
-			    cshare=cshare+i/oa_sum
-			    share.append(cshare)
-			deciledf['C.Share'] = share
-
-			D=10
-			deciledf['Decile']=0
-			for i in range(len(deciledf)):
-			    if deciledf['Overall Affinity Scores'].iloc[i] != 0:
-			        if deciledf['C.Share'].iloc[i]> (11-D)*0.1:
-			            deciledf.Decile.iloc[i] = D-1
-			            D = deciledf.Decile.iloc[i]
-			        else:
-			            deciledf.Decile.iloc[i] = D 
-			    else:
-			        deciledf.Decile.iloc[i] = 0
-
-			scoring = pd.merge(scoring,deciledf[['External ID','Decile']], on='External ID', how='left')
-
-			text_col = list(scoring.describe(include='O').columns)
-			num_col = list(scoring.describe(include=np.number).columns)
-			scoring[text_col] = scoring[text_col].astype(str)
-			scoring[num_col] = scoring[num_col].astype(np.number)
-			scoring['Segmentation'] = ""
-			scoring.loc[scoring['Decile']==0,'Segmentation']='No Digital Presence'
-			scoring.loc[(scoring['Decile']>0) & (scoring['Decile']<4),'Segmentation']='Low'
-			scoring.loc[(scoring['Decile']>=4) & (scoring['Decile']<8),'Segmentation']='Medium'
-			scoring.loc[scoring['Decile']>=8,'Segmentation']='High'
-		placeholder.text("Deciling ✔️")
-		scoring['twitter url'].replace({'0':""},inplace=True)
-		scoring_sample = scoring[['Customer/Account Name', 'External ID','twitter url','Linkedin_Url','Instagram ID','Facebook URL','Youtube Links'
-		        ,'Conference Presence Score','Digital Events Participation','Segmentation']]
-		scoring_sample.rename(columns={'Conference Presence Score':'Conference Participation'},inplace=True)
-		st.write("Deciling And HCP Segmentation:")
-		placeholder.empty()
-
-		st.dataframe(scoring_sample.sample(10))
-		st.write("Graphical Representation:")
-		fig = px.histogram(scoring,x = 'Segmentation',text_auto=True)
-		st.plotly_chart(fig)
-		st.write("")
-		scoring_xl = to_excel(scoring)
-		st.download_button(label="Download Deciling and Segmentation Sheet",data=scoring_xl,file_name="Deciling and Segmentation Sheet.xlsx",mime='xlsx')
 
 
 func(choice)	
