@@ -2394,7 +2394,8 @@ def func(choice):
 				scoring[text_col] = scoring[text_col].astype(str)
 				scoring[num_col] = scoring[num_col].astype(np.number)
 			
-			scoring_sample = scoring[['External ID','PersonFirstName_hcp','PersonMiddleName_hcp','PersonLastName_hcp','twitter url','Overall Affinity Scores','Decile','Segmentation']]
+			scoring_sample = scoring[['External ID','PersonFirstName_hcp','PersonMiddleName_hcp','PersonLastName_hcp','twitter url','total_no_tweets',
+						  ,'tweets_per_day','followers','following','days_since_tweeted','tweet_favourtied_times','relevancy','Overall Affinity Scores','Decile','Segmentation']]
 
 			st.write("Deciling And HCP Segmentation:")
 			st.dataframe(scoring_sample.sample(10))
