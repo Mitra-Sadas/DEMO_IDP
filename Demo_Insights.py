@@ -46,6 +46,7 @@ import gender_guesser.detector as gender
 g = gender.Detector()
 #from pyxlsb import open_workbook as open_xlsb
 import altair as alt
+from altair_saver import save
 
 @st.cache(allow_output_mutation=True)
 def upload1(data, data2):
@@ -1984,7 +1985,7 @@ def func(choice):
 				)
 				c = bars + text
 				c.height=230
-				c.save('absachart.png')
+				save(c,'absachart.png')
 				
 				#return c
 			def pie_chart(data):
