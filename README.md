@@ -1,1 +1,1 @@
-# Streamlit_Demo_Insights
+# DEMO_IDP
