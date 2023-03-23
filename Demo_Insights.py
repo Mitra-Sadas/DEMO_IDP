@@ -2296,7 +2296,7 @@ def func(choice):
 							#st.write("**Whats the distribution of content**:question:")
 							st.markdown('**<p style="font-size:20px;border-radius:2%;text-align:center;">Whats the distribution of content:question:</p>**',unsafe_allow_html=True)
 							with st.spinner("Running ASBA Model..."):
-								c = absa_chart(asbadf)
+								#c = absa_chart(asbadf)
 							absaplot = Image.open('absachart.png')
 							st.image(absaplot, clamp=False, channels="RGB", use_column_width=True)
 							#st.dataframe(asbadf.head())
