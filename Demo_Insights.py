@@ -46,8 +46,8 @@ import gender_guesser.detector as gender
 g = gender.Detector()
 #from pyxlsb import open_workbook as open_xlsb
 import altair as alt
-from altair_saver import save
-alt.renderers.enable('altair_saver', fmts=['vega-lite', 'png'])
+#from altair_saver import save
+#alt.renderers.enable('altair_saver', fmts=['vega-lite', 'png'])
 
 @st.cache(allow_output_mutation=True)
 def upload1(data, data2):
